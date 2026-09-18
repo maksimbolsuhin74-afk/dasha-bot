@@ -11,7 +11,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.storage.memory import MemoryStorage
 
-TOKEN = os.getenv("TOKEN")
+TOKEN = os.getenv("8632894430:AAHTi0S4Wg22As_ox8oE9SuY4X0G6bY4nlk")
 
 bot = Bot(token=TOKEN)
 storage = MemoryStorage()
