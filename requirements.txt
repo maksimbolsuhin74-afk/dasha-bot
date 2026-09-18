@@ -1,1 +1,2 @@
-notepad requirements.txt
+aiogram>=3.0
+aiohttp
