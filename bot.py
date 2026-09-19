@@ -11,7 +11,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.storage.memory import MemoryStorage
 
-TOKEN = os.getenv("8632894430:AAHTi0S4Wg22As_ox8oE9SuY4X0G6bY4nlk")
+TOKEN = os.getenv("TOKEN")
 
 bot = Bot(token=TOKEN)
 storage = MemoryStorage()
@@ -282,7 +282,6 @@ async def process_movie_answer(message: types.Message, state: FSMContext):
     current = data["current"]
     correct = data["correct"]
     q = questions[current]
-
     stats = load_stats()
 
     if answer == q["correct"]:
