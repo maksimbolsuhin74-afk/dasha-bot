@@ -28,16 +28,12 @@ class MiniGame(StatesGroup):
     waiting_for_choice = State()
 
 
-class MovieQuiz(StatesGroup):
-    waiting_for_answer = State()
-
-
 main_keyboard = ReplyKeyboardMarkup(
     keyboard=[
-        [KeyboardButton(text="🐱 Котик чтобы не грустила")],
-        [KeyboardButton(text="🔮 Предсказание на день"), KeyboardButton(text="✨ Что-то интересное")],
-        [KeyboardButton(text="🇬🇧 Учить английский"), KeyboardButton(text="🎬 Викторина по фильмам")],
-        [KeyboardButton(text="🎮 Мини-игра"), KeyboardButton(text="📊 Мой прогресс")],
+        [KeyboardButton(text="🐱 Котята"), KeyboardButton(text="🎬 Фильм на вечер")],
+        [KeyboardButton(text="🎵 Музыка"), KeyboardButton(text="✨ Что-то интересное")],
+        [KeyboardButton(text="🇬🇧 Учить английский"), KeyboardButton(text="🎮 Мини-игра")],
+        [KeyboardButton(text="📊 Мой прогресс")],
     ],
     resize_keyboard=True
 )
@@ -50,57 +46,103 @@ game_keyboard = ReplyKeyboardMarkup(
     resize_keyboard=True
 )
 
-movie_questions = [
-    {
-        "question": "В каком фильме главный герой говорит: «Я буду обратно»?",
-        "options": ["Терминатор", "Назад в будущее", "Хищник", "Рэмбо"],
-        "correct": "Терминатор",
-    },
-    {
-        "question": "Как зовут главного героя фильма «Гарри Поттер»?",
-        "options": ["Гарри Поттер", "Рон Уизли", "Драко Малфой", "Невилл Долгопупс"],
-        "correct": "Гарри Поттер",
-    },
-    {
-        "question": "Какой мультфильм про игрушки, которые оживают?",
-        "options": ["Корпорация монстров", "История игрушек", "Шрек", "Ледниковый период"],
-        "correct": "История игрушек",
-    },
-    {
-        "question": "В каком фильме есть персонаж по имени Джокер?",
-        "options": ["Мстители", "Тёмный рыцарь", "Человек-паук", "Железный человек"],
-        "correct": "Тёмный рыцарь",
-    },
-    {
-        "question": "Кто сыграл Джека в фильме «Титаник»?",
-        "options": ["Брэд Питт", "Леонардо ДиКаприо", "Том Круз", "Джонни Депп"],
-        "correct": "Леонардо ДиКаприо",
-    },
-    {
-        "question": "В каком мультфильме рыбка ищет своего сына?",
-        "options": ["В поисках Немо", "Рыбка Поньо", "Акулы", "Русалочка"],
-        "correct": "В поисках Немо",
-    },
-    {
-        "question": "Как зовут главного злодея в «Короле Льве»?",
-        "options": ["Муфаса", "Шрам", "Тимон", "Пуба"],
-        "correct": "Шрам",
-    },
-    {
-        "question": "В каком фильме есть фраза: «Да пребудет с тобой Сила»?",
-        "options": ["Звёздные войны", "Звёздный путь", "Дюна", "Стражи Галактики"],
-        "correct": "Звёздные войны",
-    },
-    {
-        "question": "Какой фильм про мальчика, который не хочет взрослеть?",
-        "options": ["Чарли и шоколадная фабрика", "Питер Пэн", "Хроники Нарнии", "Золотой компас"],
-        "correct": "Питер Пэн",
-    },
-    {
-        "question": "В каком фильме главный герой — зелёный огр?",
-        "options": ["Шрек", "Монстры на каникулах", "Корпорация монстров", "Город героев"],
-        "correct": "Шрек",
-    },
+movies = [
+    {"title": "Сумерки", "why": "Романтика + вампиры. Классика, если любишь такой вайб."},
+    {"title": "Интервью с вампиром", "why": "Кинопоиск 7.9. Красивая и мрачная история."},
+    {"title": "Дракула Брэма Стокера", "why": "Кинопоиск 7.8. Готическая любовь."},
+    {"title": "Другой мир", "why": "Кинопоиск 7.6. Вампиры и оборотни, очень стильно."},
+    {"title": "Век Адалин", "why": "IMDb 7.2. Девушка не стареет и ищет любовь."},
+    {"title": "Тепло наших тел", "why": "IMDb 6.8. Милая романтика с необычным героем."},
+    {"title": "Полночное солнце", "why": "Кинопоиск 7.0. Любовь, которая почти невозможна."},
+    {"title": "Прекрасные создания", "why": "Как «Сумерки», только про ведьм."},
+    {"title": "Виноваты звёзды", "why": "IMDb 7.7. Очень сильная и красивая история любви."},
+    {"title": "Три метра над уровнем неба", "why": "IMDb 7.1. Страстная запретная любовь."},
+    {"title": "Дневник памяти", "why": "IMDb 7.8. Трогательная романтика на весь вечер."},
+    {"title": "Гордость и предубеждение (2005)", "why": "Красивая классика про любовь."},
+    {"title": "Ла-Ла Ленд", "why": "IMDb 8.0. Музыка, город и большая любовь."},
+    {"title": "Эдвард Руки-ножницы", "why": "IMDb 7.9. Готическая сказка про «другого»."},
+    {"title": "Красавица и чудовище (2017)", "why": "Сказка: обычная девушка и загадочный герой."},
+    {"title": "Амели", "why": "Добрый и необычный фильм про любовь."},
+    {"title": "Титаник", "why": "IMDb 7.9. Большая история любви."},
+    {"title": "Гарри Поттер и философский камень", "why": "Волшебство и уют."},
+    {"title": "Гарри Поттер и узник Азкабана", "why": "Один из самых атмосферных фильмов серии."},
+    {"title": "Хроники Нарнии: Лев, колдунья и волшебный шкаф", "why": "Доброе фэнтези про другой мир."},
+    {"title": "Как приручить дракона", "why": "Драконы, дружба и приключения."},
+    {"title": "Голодные игры", "why": "Кинопоиск 7.3. Сильная героиня и напряжённый мир."},
+    {"title": "Душа", "why": "Красивый мультфильм про жизнь и мечты."},
+    {"title": "Головоломка", "why": "Про эмоции, тёплый и умный мультфильм."},
+    {"title": "Рататуй", "why": "Уютный фильм про мечту."},
+    {"title": "Шрек", "why": "Если хочется посмеяться."},
+    {"title": "Аватар", "why": "IMDb 7.9. Другой мир, природа и любовь."},
+    {"title": "Начало", "why": "IMDb 8.8. Умное и красивое кино."},
+    {"title": "Интерстеллар", "why": "IMDb 8.7. Космос, семья и сильные чувства."},
+    {"title": "Один дома", "why": "Простой и смешной фильм."},
+    {"title": "Паддингтон 2", "why": "Очень милый и добрый фильм."},
+    {"title": "Практическая магия", "why": "Ведьмы, сёстры и романтика."},
+    {"title": "Зачарованная", "why": "Сказка, которая попадает в реальный мир."},
+    {"title": "Ходячий замок", "why": "Красивое аниме-фэнтези про ведьму и мага."},
+    {"title": "Унесённые призраками", "why": "Волшебный другой мир."},
+    {"title": "Дневники вампира", "why": "Кинопоиск 8.0. Сериал: школа, вампиры, треугольник."},
+]
+
+songs = [
+    {"title": "Cardigan", "artist": "Taylor Swift"},
+    {"title": "Lover", "artist": "Taylor Swift"},
+    {"title": "August", "artist": "Taylor Swift"},
+    {"title": "Cruel Summer", "artist": "Taylor Swift"},
+    {"title": "Style", "artist": "Taylor Swift"},
+    {"title": "Vampire", "artist": "Olivia Rodrigo"},
+    {"title": "Drivers License", "artist": "Olivia Rodrigo"},
+    {"title": "Good Luck, Babe!", "artist": "Chappell Roan"},
+    {"title": "Espresso", "artist": "Sabrina Carpenter"},
+    {"title": "Nonsense", "artist": "Sabrina Carpenter"},
+    {"title": "Birds of a Feather", "artist": "Billie Eilish"},
+    {"title": "What Was I Made For?", "artist": "Billie Eilish"},
+    {"title": "Happier Than Ever", "artist": "Billie Eilish"},
+    {"title": "Summertime Sadness", "artist": "Lana Del Rey"},
+    {"title": "Video Games", "artist": "Lana Del Rey"},
+    {"title": "Young and Beautiful", "artist": "Lana Del Rey"},
+    {"title": "That's So True", "artist": "Gracie Abrams"},
+    {"title": "I Love You, I'm Sorry", "artist": "Gracie Abrams"},
+    {"title": "As It Was", "artist": "Harry Styles"},
+    {"title": "Sign of the Times", "artist": "Harry Styles"},
+    {"title": "Watermelon Sugar", "artist": "Harry Styles"},
+    {"title": "Easy On Me", "artist": "Adele"},
+    {"title": "Someone Like You", "artist": "Adele"},
+    {"title": "Set Fire to the Rain", "artist": "Adele"},
+    {"title": "Shallow", "artist": "Lady Gaga & Bradley Cooper"},
+    {"title": "Die With A Smile", "artist": "Lady Gaga & Bruno Mars"},
+    {"title": "Just the Way You Are", "artist": "Bruno Mars"},
+    {"title": "Levitating", "artist": "Dua Lipa"},
+    {"title": "Don't Start Now", "artist": "Dua Lipa"},
+    {"title": "Flowers", "artist": "Miley Cyrus"},
+    {"title": "Perfect", "artist": "Ed Sheeran"},
+    {"title": "Photograph", "artist": "Ed Sheeran"},
+    {"title": "Yellow", "artist": "Coldplay"},
+    {"title": "The Scientist", "artist": "Coldplay"},
+    {"title": "Fix You", "artist": "Coldplay"},
+    {"title": "Do I Wanna Know?", "artist": "Arctic Monkeys"},
+    {"title": "I Wanna Be Yours", "artist": "Arctic Monkeys"},
+    {"title": "Sweater Weather", "artist": "The Neighbourhood"},
+    {"title": "Apocalypse", "artist": "Cigarettes After Sex"},
+    {"title": "Heavenly", "artist": "Cigarettes After Sex"},
+    {"title": "Night Changes", "artist": "One Direction"},
+    {"title": "What Makes You Beautiful", "artist": "One Direction"},
+    {"title": "Stay With Me", "artist": "Sam Smith"},
+    {"title": "I'm Not The Only One", "artist": "Sam Smith"},
+    {"title": "Stitches", "artist": "Shawn Mendes"},
+    {"title": "Treat You Better", "artist": "Shawn Mendes"},
+    {"title": "Skinny Love", "artist": "Birdy"},
+    {"title": "Another Love", "artist": "Tom Odell"},
+    {"title": "Let Her Go", "artist": "Passenger"},
+    {"title": "Somewhere Only We Know", "artist": "Keane"},
+    {"title": "Chasing Cars", "artist": "Snow Patrol"},
+    {"title": "All of Me", "artist": "John Legend"},
+    {"title": "A Thousand Years", "artist": "Christina Perri"},
+    {"title": "Unstoppable", "artist": "Sia"},
+    {"title": "Chandelier", "artist": "Sia"},
+    {"title": "Radioactive", "artist": "Imagine Dragons"},
+    {"title": "Demons", "artist": "Imagine Dragons"},
 ]
 
 lessons = [
@@ -118,35 +160,21 @@ lessons = [
 
 praises = ["Молодец, Даша! 💖", "Отлично! 🌸", "Супер! ✨", "Правильно! 💕", "Умница! 🌟"]
 greetings = ["Привет, Даша! 💖", "Привееет, Даша! 🌸", "Даша, привет! ✨", "Хей, Даша! 😊"]
-compliments = ["Ты сегодня особенно красивая 💕", "Сегодня тебя ждёт что-то приятное ✨", "Ты солнышко ☀️"]
 random_replies = ["Я тут 💕", "Слушаю тебя 🌸", "Ты милая 💖", "Я рядом 🧸"]
 
 
 def load_stats():
+    default = {"correct": 0, "lessons_completed": 0, "games_played": 0, "games_won": 0}
     if not os.path.exists(STATS_FILE):
-        return {
-            "correct": 0,
-            "lessons_completed": 0,
-            "games_played": 0,
-            "games_won": 0,
-            "quiz_correct": 0,
-            "quiz_played": 0,
-        }
+        return default
     try:
         with open(STATS_FILE, "r", encoding="utf-8") as f:
             data = json.load(f)
-            data.setdefault("quiz_correct", 0)
-            data.setdefault("quiz_played", 0)
+            for key, value in default.items():
+                data.setdefault(key, value)
             return data
     except Exception:
-        return {
-            "correct": 0,
-            "lessons_completed": 0,
-            "games_played": 0,
-            "games_won": 0,
-            "quiz_correct": 0,
-            "quiz_played": 0,
-        }
+        return default
 
 
 def save_stats(stats):
@@ -155,9 +183,7 @@ def save_stats(stats):
 
 
 def normalize(text: str) -> str:
-    return " ".join(
-        text.lower().strip().replace(".", "").replace("!", "").replace("?", "").split()
-    )
+    return " ".join(text.lower().strip().replace(".", "").replace("!", "").replace("?", "").split())
 
 
 async def get_random_cat():
@@ -200,7 +226,7 @@ async def start_command(message: types.Message, state: FSMContext):
     await message.answer(random.choice(greetings), reply_markup=main_keyboard)
 
 
-@dp.message(F.text == "🐱 Котик чтобы не грустила")
+@dp.message(F.text == "🐱 Котята")
 async def send_cat(message: types.Message, state: FSMContext):
     await state.clear()
     photo = await get_random_cat()
@@ -210,10 +236,33 @@ async def send_cat(message: types.Message, state: FSMContext):
         await message.answer("Котики спят 😴")
 
 
-@dp.message(F.text == "🔮 Предсказание на день")
-async def prediction(message: types.Message, state: FSMContext):
+@dp.message(F.text == "🎬 Фильм на вечер")
+async def random_movie(message: types.Message, state: FSMContext):
     await state.clear()
-    await message.answer(random.choice(compliments))
+    movie = random.choice(movies)
+    await message.answer(
+        f"🎬 Сегодня можно посмотреть:\n\n"
+        f"<b>{movie['title']}</b>\n"
+        f"{movie['why']}\n\n"
+        f"Если не зайдёт — нажми кнопку ещё раз 💫",
+        parse_mode="HTML",
+    )
+
+
+@dp.message(F.text == "🎵 Музыка")
+async def random_song(message: types.Message, state: FSMContext):
+    await state.clear()
+    song = random.choice(songs)
+    query = f"{song['artist']} {song['title']}"
+    link = "https://www.youtube.com/results?search_query=" + quote(query)
+    await message.answer(
+        f"🎵 Сегодня можно послушать:\n\n"
+        f"<b>{song['artist']} — {song['title']}</b>\n\n"
+        f"<a href=\"{link}\">Открыть на YouTube</a>\n\n"
+        f"Если не зайдёт — нажми кнопку ещё раз 💫",
+        parse_mode="HTML",
+        disable_web_page_preview=True,
+    )
 
 
 @dp.message(F.text == "✨ Что-то интересное")
@@ -235,86 +284,9 @@ async def show_progress(message: types.Message, state: FSMContext):
         f"📊 <b>Твой прогресс:</b>\n\n"
         f"✅ Английский: {stats['correct']}\n"
         f"📚 Уроков: {stats['lessons_completed']}\n"
-        f"🎬 Викторина: {stats['quiz_correct']}\n"
         f"🎮 Игр: {stats['games_played']} (побед: {stats['games_won']})"
     )
     await message.answer(text, parse_mode="HTML")
-
-
-@dp.message(F.text == "🎬 Викторина по фильмам")
-async def start_movie_quiz(message: types.Message, state: FSMContext):
-    await state.clear()
-    questions = movie_questions.copy()
-    random.shuffle(questions)
-    await state.set_state(MovieQuiz.waiting_for_answer)
-    await state.update_data(questions=questions, current=0, correct=0)
-
-    q = questions[0]
-    options = q["options"].copy()
-    random.shuffle(options)
-
-    keyboard = ReplyKeyboardMarkup(
-        keyboard=[[KeyboardButton(text=opt)] for opt in options] + [[KeyboardButton(text="🔙 Выйти")]],
-        resize_keyboard=True,
-    )
-
-    await message.answer(
-        f"🎬 <b>Викторина!</b>\n\nВопрос 1:\n\n{q['question']}",
-        parse_mode="HTML",
-        reply_markup=keyboard,
-    )
-
-
-@dp.message(MovieQuiz.waiting_for_answer)
-async def process_movie_answer(message: types.Message, state: FSMContext):
-    answer = message.text.strip()
-    if answer == "🔙 Выйти":
-        data = await state.get_data()
-        await state.clear()
-        await message.answer(
-            f"Викторина окончена! Правильных: {data.get('correct', 0)} 💖",
-            reply_markup=main_keyboard,
-        )
-        return
-
-    data = await state.get_data()
-    questions = data["questions"]
-    current = data["current"]
-    correct = data["correct"]
-    q = questions[current]
-    stats = load_stats()
-
-    if answer == q["correct"]:
-        correct += 1
-        stats["quiz_correct"] += 1
-        save_stats(stats)
-        reply = random.choice(praises)
-    else:
-        reply = f"Неправильно. Ответ: <b>{q['correct']}</b>"
-
-    if current + 1 < len(questions):
-        next_q = questions[current + 1]
-        options = next_q["options"].copy()
-        random.shuffle(options)
-        keyboard = ReplyKeyboardMarkup(
-            keyboard=[[KeyboardButton(text=opt)] for opt in options] + [[KeyboardButton(text="🔙 Выйти")]],
-            resize_keyboard=True,
-        )
-        await state.update_data(current=current + 1, correct=correct)
-        await message.answer(
-            f"{reply}\n\nВопрос {current + 2}:\n\n{next_q['question']}",
-            parse_mode="HTML",
-            reply_markup=keyboard,
-        )
-    else:
-        stats["quiz_played"] += 1
-        save_stats(stats)
-        await state.clear()
-        await message.answer(
-            f"{reply}\n\n🏁 Конец! Правильных: {correct} из {len(questions)} 💖",
-            parse_mode="HTML",
-            reply_markup=main_keyboard,
-        )
 
 
 @dp.message(F.text == "🇬🇧 Учить английский")
